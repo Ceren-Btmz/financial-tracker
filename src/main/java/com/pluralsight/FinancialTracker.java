@@ -248,6 +248,7 @@ public class FinancialTracker {
                     // Generate a report for all transactions within the previous year,
                     // including the date, vendor, and amount for each transaction.
                 case "5":
+                    filterTransactionsByVendor(transactions.toString());
                     // Prompt the user to enter a vendor name, then generate a report for all transactions
                     // with that vendor, including the date, vendor, and amount for each transaction.
                 case "0":
@@ -274,5 +275,19 @@ public class FinancialTracker {
         // The method loops through the transactions list and checks each transaction's vendor name against the specified vendor name.
         // Transactions with a matching vendor name are printed to the console.
         // If no transactions match the specified vendor name, the method prints a message indicating that there are no results.
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Enter vendor name: ");
+            String vendorName = scanner.nextLine();
+
+            for (Transaction transaction : transactions) {
+                if (transaction.getVendor() == vendorName) {
+                    System.out.println(transaction);
+                    return;
+                }
+            } System.out.println("There are no transactions under this vendor!");
+        } catch (Exception ex) {
+            System.out.println("Something went wrong! Please try again.");
+        }
     }
 }
