@@ -55,14 +55,17 @@ public class FinancialTracker {
     }
 
     public static void loadTransactions(String fileName) {
-        // This method should load transactions from a file with the given file name.
-        // If the file does not exist, it should be created.
-        // The transactions should be stored in the `transactions` ArrayList.
-        // Each line of the file represents a single transaction in the following format:
-        // <date>,<time>,<vendor>,<type>,<amount>
-        // For example: 2023-04-29,13:45:00,Amazon,PAYMENT,29.99
-        // After reading all the transactions, the file should be closed.
-        // If any errors occur, an appropriate error message should be displayed.
+        try {
+            File myFile = new File(fileName);
+            if (myFile.createNewFile()) {
+                System.out.println("new file created");
+            } else {
+                System.out.println("file already exists!");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         try {
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
             String line;
@@ -77,29 +80,91 @@ public class FinancialTracker {
 
                 Transaction transaction = new Transaction(date, time, description, vendor, amount);
 
-                System.out.println("Transactions: " + "\n" + transaction);
+                transactions.add(transaction);
             }
-        } catch(IOException ex){
+            reader.close();
+
+        } catch (IOException ex) {
             System.out.println("Error reading file " + fileName);
         }
     }
 
-        private static void addDeposit (Scanner scanner){
-            // This method should prompt the user to enter the date, time, vendor, and amount of a deposit.
-            // The user should enter the date and time in the following format: yyyy-MM-dd HH:mm:ss
-            // The amount should be a positive number.
-            // After validating the input, a new `Deposit` object should be created with the entered values.
-            // The new deposit should be added to the `transactions` ArrayList.
+    private static void addDeposit(Scanner scanner) {
+            System.out.println("Enter the date (yyyy-MM-dd): ");
+            String date = scanner.nextLine();
+            LocalDate formattedDate = LocalDate.parse(date, DATE_FORMATTER);
 
+            System.out.println("Enter the time (HH:mm:ss): ");
+            String time = scanner.nextLine();
+            LocalTime formattedTime = LocalTime.parse(time, TIME_FORMATTER);
+
+            System.out.println("Enter the description: ");
+            String description = scanner.nextLine();
+
+            System.out.println("Enter the vendor: ");
+            String vendor = scanner.nextLine();
+
+            System.out.println("Enter the deposit amount (Must Be POSITIVE) : $ ");
+            double deposit = scanner.nextDouble();
+            scanner.nextLine();
+            if (deposit < 0) {
+                System.out.println("ERROR: Invalid Input! Please try again!");
+                System.out.println("\n Deposit amount (enter a positive value) : $ ");
+            }
+
+            try {
+                Transaction newDeposit = new Transaction(formattedDate, formattedTime, description, vendor, deposit);
+                transactions.add(newDeposit);
+
+                BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
+                String outputLine = newDeposit.getDate() + "|" + newDeposit.getTime() + "|" + newDeposit.getDescription() + "|" + newDeposit.getVendor() + "|" + newDeposit.getAmount();
+                writer.write("\n" + outputLine);
+                writer.close();
+            } catch (IOException ex) {
+                System.out.println("Error! Something went wrong!");
+            }
         }
-
         private static void addPayment (Scanner scanner){
             // This method should prompt the user to enter the date, time, vendor, and amount of a payment.
             // The user should enter the date and time in the following format: yyyy-MM-dd HH:mm:ss
             // The amount should be a positive number.
             // After validating the input, a new `Payment` object should be created with the entered values.
             // The new payment should be added to the `transactions` ArrayList.
+            System.out.println("Enter the date (yyyy-MM-dd): ");
+            String date = scanner.nextLine();
+            LocalDate formattedDate = LocalDate.parse(date, DATE_FORMATTER);
+
+            System.out.println("Enter the time (HH:mm:ss): ");
+            String time = scanner.nextLine();
+            LocalTime formattedTime = LocalTime.parse(time, TIME_FORMATTER);
+
+            System.out.println("Enter the description: ");
+            String description = scanner.nextLine();
+
+            System.out.println("Enter the vendor: ");
+            String vendor = scanner.nextLine();
+
+            System.out.println("Enter the payment amount (Must Be POSITIVE) : $ ");
+            double payment = scanner.nextDouble();
+            scanner.nextLine();
+            if (payment < 0) {
+                System.out.println("ERROR: Invalid Input! Please try again!");
+                System.out.println("\n Deposit amount (enter a positive value) : $ ");
+            }
+
+            try {
+                Transaction newPayment = new Transaction(formattedDate, formattedTime, description, vendor, payment);
+                transactions.add(newPayment);
+
+                BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
+                String outputLine = newPayment.getDate() + "|" + newPayment.getTime() + "|" + newPayment.getDescription() + "|" + newPayment.getVendor() + "|" + "-" + newPayment.getAmount();
+                writer.write("\n" + outputLine);
+                writer.close();
+            } catch (IOException ex) {
+                System.out.println("Error! Something went wrong!");
+            }
         }
+
 
         private static void ledgerMenu (Scanner scanner){
             boolean running = true;
