@@ -150,7 +150,6 @@ public class FinancialTracker {
         scanner.nextLine();
         if (payment < 0) {
             System.out.println("ERROR: Invalid Input! Please try again!");
-            System.out.println("\n Deposit amount (enter a positive value) : $ ");
         }
 
         try {
@@ -182,7 +181,7 @@ public class FinancialTracker {
 
             switch (input.toUpperCase()) {
                 case "A":
-                    displayLedger(transactions);
+                    displayLedger();
                     break;
                 case "D":
                     displayDeposits();
@@ -195,6 +194,7 @@ public class FinancialTracker {
                     break;
                 case "H":
                     running = false;
+                    break;
                 default:
                     System.out.println("Invalid option");
                     break;
@@ -202,7 +202,7 @@ public class FinancialTracker {
         }
     }
 
-    private static void displayLedger(ArrayList<Transaction> transactions) {
+    private static void displayLedger() {
         System.out.println("All Transactions: ");
         for (int i = 0; i < transactions.size(); i++) {
             System.out.println(transactions.get(i));
@@ -247,6 +247,7 @@ public class FinancialTracker {
                 case "1":
                     // Generate a report for all transactions within the current month,
                     // including the date, vendor, and amount for each transaction.
+                    filterTransactionsByDate(LocalDate.now().withDayOfMonth(1), LocalDate.now());
                 case "2":
                     // Generate a report for all transactions within the previous month,
                     // including the date, vendor, and amount for each transaction.
@@ -259,8 +260,6 @@ public class FinancialTracker {
                     // including the date, vendor, and amount for each transaction.
                 case "5":
                     filterTransactionsByVendor(transactions.toString());
-                    // Prompt the user to enter a vendor name, then generate a report for all transactions
-                    // with that vendor, including the date, vendor, and amount for each transaction.
                 case "0":
                     running = false;
                 default:
@@ -272,37 +271,11 @@ public class FinancialTracker {
 
 
     private static void filterTransactionsByDate(LocalDate startDate, LocalDate endDate) {
-        // This method filters the transactions by date and prints a report to the console.
-        // It takes two parameters: startDate and endDate, which represent the range of dates to filter by.
-        // The method loops through the transactions list and checks each transaction's date against the date range.
-        // Transactions that fall within the date range are printed to the console.
-        // If no transactions fall within the date range, the method prints a message indicating that there are no results.
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Enter start date here: ");
-        System.out.println("Enter the month (MM): ");
-        String month1 = scanner.nextLine();
-
-        System.out.println("Enter the day (dd): ");
-        String day1 = scanner.nextLine();
-
-        System.out.println("Enter the year (yyyy):");
-        String year1 = scanner.nextLine();
-        startDate = LocalDate.parse(month1 + day1 + year1, DATE_FORMATTER);
-
-        System.out.println("Enter end date here: ");
-        System.out.println("Enter the month (MM): ");
-        String month2 = scanner.nextLine();
-
-        System.out.println("Enter the day (dd): ");
-        String day2 = scanner.nextLine();
-
-        System.out.println("Enter the year (yyyy): ");
-        String year2 = scanner.nextLine();
-        endDate = LocalDate.parse(month2 + day2 + year2, DATE_FORMATTER);
-
-        for (int i = 0; i < transactions.size(); i++) {
-            if (transactions.stream(). ))
+        System.out.println("Report: ");
+        for (Transaction transaction : transactions) {
+            if (transaction.getDate().isAfter(startDate.minusDays(1)) && transaction.getDate().isBefore(endDate.plusDays(1))) {
+                System.out.println(transaction);
+            }
         }
     }
 
@@ -322,7 +295,8 @@ public class FinancialTracker {
                     System.out.println(transaction);
                     return;
                 }
-            } System.out.println("There are no transactions under this vendor!");
+            }
+            System.out.println("There are no transactions under this vendor!");
         } catch (Exception ex) {
             System.out.println("Something went wrong! Please try again.");
         }
