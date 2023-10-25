@@ -225,7 +225,7 @@ public class FinancialTracker {
         for (int i = 0; i < transactions.size(); i++) {
             if (transactions.get(i).getAmount() <= 0) {
                 System.out.println(transactions.get(i));
-            } 
+            }
         }
     }
 
@@ -277,6 +277,9 @@ public class FinancialTracker {
         // The method loops through the transactions list and checks each transaction's date against the date range.
         // Transactions that fall within the date range are printed to the console.
         // If no transactions fall within the date range, the method prints a message indicating that there are no results.
+        System.out.println("Enter start date here: ");
+        System.out.println("Enter the month (MM): ");
+
     }
 
     private static void filterTransactionsByVendor(String vendor) {
@@ -291,7 +294,7 @@ public class FinancialTracker {
             String vendorName = scanner.nextLine();
 
             for (Transaction transaction : transactions) {
-                if (transaction.getVendor() == vendorName) {
+                if (transaction.getVendor().equalsIgnoreCase(vendorName)) {
                     System.out.println(transaction);
                     return;
                 }
