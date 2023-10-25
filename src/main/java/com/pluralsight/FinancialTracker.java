@@ -277,9 +277,33 @@ public class FinancialTracker {
         // The method loops through the transactions list and checks each transaction's date against the date range.
         // Transactions that fall within the date range are printed to the console.
         // If no transactions fall within the date range, the method prints a message indicating that there are no results.
+        Scanner scanner = new Scanner(System.in);
+
         System.out.println("Enter start date here: ");
         System.out.println("Enter the month (MM): ");
+        String month1 = scanner.nextLine();
 
+        System.out.println("Enter the day (dd): ");
+        String day1 = scanner.nextLine();
+
+        System.out.println("Enter the year (yyyy):");
+        String year1 = scanner.nextLine();
+        startDate = LocalDate.parse(month1 + day1 + year1, DATE_FORMATTER);
+
+        System.out.println("Enter end date here: ");
+        System.out.println("Enter the month (MM): ");
+        String month2 = scanner.nextLine();
+
+        System.out.println("Enter the day (dd): ");
+        String day2 = scanner.nextLine();
+
+        System.out.println("Enter the year (yyyy): ");
+        String year2 = scanner.nextLine();
+        endDate = LocalDate.parse(month2 + day2 + year2, DATE_FORMATTER);
+
+        for (int i = 0; i < transactions.size(); i++) {
+            if (transactions.stream(). ))
+        }
     }
 
     private static void filterTransactionsByVendor(String vendor) {
