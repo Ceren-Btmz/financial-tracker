@@ -109,7 +109,6 @@ public class FinancialTracker {
         scanner.nextLine();
         if (deposit < 0) {
             System.out.println("ERROR: Invalid Input! Please try again!");
-            System.out.println("\n Deposit amount (enter a positive value) : $ ");
         }
 
         try {
@@ -126,11 +125,6 @@ public class FinancialTracker {
     }
 
     private static void addPayment(Scanner scanner) {
-        // This method should prompt the user to enter the date, time, vendor, and amount of a payment.
-        // The user should enter the date and time in the following format: yyyy-MM-dd HH:mm:ss
-        // The amount should be a positive number.
-        // After validating the input, a new `Payment` object should be created with the entered values.
-        // The new payment should be added to the `transactions` ArrayList.
         System.out.println("Enter the date (yyyy-MM-dd): ");
         String date = scanner.nextLine();
         LocalDate formattedDate = LocalDate.parse(date, DATE_FORMATTER);
@@ -251,13 +245,15 @@ public class FinancialTracker {
                 case "2":
                     // Generate a report for all transactions within the previous month,
                     // including the date, vendor, and amount for each transaction.
+                    filterTransactionsByDate(LocalDate.now().withDayOfMonth(1).minusMonths(1), LocalDate.now().withDayOfMonth(1).minusDays(1));
                 case "3":
                     // Generate a report for all transactions within the current year,
                     // including the date, vendor, and amount for each transaction.
-
+                    filterTransactionsByDate(LocalDate.now().withDayOfYear(1), LocalDate.now().withMonth(12).withDayOfMonth(31));
                 case "4":
                     // Generate a report for all transactions within the previous year,
                     // including the date, vendor, and amount for each transaction.
+                    filterTransactionsByDate(LocalDate.now().minusYears(1).withDayOfYear(1), LocalDate.now().minusYears(1).withMonth(12).withDayOfMonth(31));
                 case "5":
                     filterTransactionsByVendor(transactions.toString());
                 case "0":
@@ -280,18 +276,9 @@ public class FinancialTracker {
     }
 
     private static void filterTransactionsByVendor(String vendor) {
-        // This method filters the transactions by vendor and prints a report to the console.
-        // It takes one parameter: vendor, which represents the name of the vendor to filter by.
-        // The method loops through the transactions list and checks each transaction's vendor name against the specified vendor name.
-        // Transactions with a matching vendor name are printed to the console.
-        // If no transactions match the specified vendor name, the method prints a message indicating that there are no results.
         try {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Enter vendor name: ");
-            String vendorName = scanner.nextLine();
-
             for (Transaction transaction : transactions) {
-                if (transaction.getVendor().equalsIgnoreCase(vendorName)) {
+                if (transaction.getVendor().equalsIgnoreCase(vendor)) {
                     System.out.println(transaction);
                     return;
                 }
