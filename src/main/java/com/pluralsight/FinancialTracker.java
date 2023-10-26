@@ -145,13 +145,14 @@ public class FinancialTracker {
         if (payment < 0) {
             System.out.println("ERROR: Invalid Input! Please try again!");
         }
+        payment = payment * -1;
 
         try {
             Transaction newPayment = new Transaction(formattedDate, formattedTime, description, vendor, payment);
             transactions.add(newPayment);
 
             BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true));
-            String outputLine = newPayment.getDate() + "|" + newPayment.getTime() + "|" + newPayment.getDescription() + "|" + newPayment.getVendor() + "|" + "-" + newPayment.getAmount();
+            String outputLine = newPayment.getDate() + "|" + newPayment.getTime() + "|" + newPayment.getDescription() + "|" + newPayment.getVendor() + "|" +  newPayment.getAmount();
             writer.write("\n" + outputLine);
             writer.close();
         } catch (IOException ex) {
@@ -239,25 +240,24 @@ public class FinancialTracker {
 
             switch (input) {
                 case "1":
-                    // Generate a report for all transactions within the current month,
-                    // including the date, vendor, and amount for each transaction.
+                    // Month to date search here
                     filterTransactionsByDate(LocalDate.now().withDayOfMonth(1), LocalDate.now());
+                    break;
                 case "2":
-                    // Generate a report for all transactions within the previous month,
-                    // including the date, vendor, and amount for each transaction.
                     filterTransactionsByDate(LocalDate.now().withDayOfMonth(1).minusMonths(1), LocalDate.now().withDayOfMonth(1).minusDays(1));
+                    break;
                 case "3":
-                    // Generate a report for all transactions within the current year,
-                    // including the date, vendor, and amount for each transaction.
-                    filterTransactionsByDate(LocalDate.now().withDayOfYear(1), LocalDate.now().withMonth(12).withDayOfMonth(31));
+                    filterTransactionsByDate(LocalDate.now().withDayOfYear(1), LocalDate.now());
+                    break;
                 case "4":
-                    // Generate a report for all transactions within the previous year,
-                    // including the date, vendor, and amount for each transaction.
                     filterTransactionsByDate(LocalDate.now().minusYears(1).withDayOfYear(1), LocalDate.now().minusYears(1).withMonth(12).withDayOfMonth(31));
+                    break;
                 case "5":
-                    filterTransactionsByVendor(transactions.toString());
+                    filterTransactionsByVendor();
+                    break;
                 case "0":
                     running = false;
+                    break;
                 default:
                     System.out.println("Invalid option");
                     break;
@@ -267,18 +267,21 @@ public class FinancialTracker {
 
 
     private static void filterTransactionsByDate(LocalDate startDate, LocalDate endDate) {
-        System.out.println("Report: ");
-        for (Transaction transaction : transactions) {
-            if (transaction.getDate().isAfter(startDate.minusDays(1)) && transaction.getDate().isBefore(endDate.plusDays(1))) {
-                System.out.println(transaction);
-            }
-        }
+           for (Transaction transaction : transactions) {
+               if (transaction.getDate().isAfter(startDate.minusDays(1)) && transaction.getDate().isBefore(endDate.plusDays(1))) {
+                   System.out.println(transaction);
+               }
+           }
+           System.out.println("There are no transactions in this timeline!");
     }
+    private static void filterTransactionsByVendor() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter Vendor: ");
+        String vendorName = scanner.nextLine();
 
-    private static void filterTransactionsByVendor(String vendor) {
         try {
             for (Transaction transaction : transactions) {
-                if (transaction.getVendor().equalsIgnoreCase(vendor)) {
+                if (transaction.getVendor().equalsIgnoreCase(vendorName)) {
                     System.out.println(transaction);
                     return;
                 }
