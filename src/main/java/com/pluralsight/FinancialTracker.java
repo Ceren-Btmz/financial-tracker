@@ -55,6 +55,8 @@ public class FinancialTracker {
     }
 
     public static void loadTransactions(String fileName) {
+        // This method helps load all transactions within the transactions.csv file.
+        // This displays each transaction with the date, time, description, vendor and amount separated by a barrier
         try {
             File myFile = new File(fileName);
             if (myFile.createNewFile()) {
@@ -90,6 +92,7 @@ public class FinancialTracker {
     }
 
     private static void addDeposit(Scanner scanner) {
+        // Collects date, time, description, vendor, and amount while storing this information in the transactions.csv file.
         System.out.println("Enter the date (yyyy-MM-dd): ");
         String date = scanner.nextLine();
         LocalDate formattedDate = LocalDate.parse(date, DATE_FORMATTER);
@@ -125,6 +128,8 @@ public class FinancialTracker {
     }
 
     private static void addPayment(Scanner scanner) {
+        // Collects date, time, description, vendor, and amount while storing this information in the transactions.csv file.
+        // The amount received will be stored as a negative here because it is a payment.
         System.out.println("Enter the date (yyyy-MM-dd): ");
         String date = scanner.nextLine();
         LocalDate formattedDate = LocalDate.parse(date, DATE_FORMATTER);
@@ -198,6 +203,7 @@ public class FinancialTracker {
     }
 
     private static void displayLedger() {
+        // displays all transactions
         System.out.println("All Transactions: ");
         for (int i = 0; i < transactions.size(); i++) {
             System.out.println(transactions.get(i));
@@ -205,6 +211,7 @@ public class FinancialTracker {
     }
 
     private static void displayDeposits() {
+        // displays all transactions that are deposits.
         System.out.println("All Deposits: ");
 
         for (int i = 0; i < transactions.size(); i++) {
@@ -215,6 +222,7 @@ public class FinancialTracker {
     }
 
     private static void displayPayments() {
+        // displays all transactions that are payments (negative values)
         System.out.println("All Payments: ");
 
         for (int i = 0; i < transactions.size(); i++) {
@@ -267,6 +275,7 @@ public class FinancialTracker {
 
 
     private static void filterTransactionsByDate(LocalDate startDate, LocalDate endDate) {
+        // filters transactions by given date limitations: month to date, previous month, year to date, and previous year
            for (Transaction transaction : transactions) {
                if (transaction.getDate().isAfter(startDate.minusDays(1)) && transaction.getDate().isBefore(endDate.plusDays(1))) {
                    System.out.println(transaction);
@@ -275,6 +284,7 @@ public class FinancialTracker {
            System.out.println("There are no transactions in this timeline!");
     }
     private static void filterTransactionsByVendor() {
+        // takes vendor information from user, to cross-reference and display any transactions under that vendor
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter Vendor: ");
         String vendorName = scanner.nextLine();
