@@ -279,6 +279,7 @@ public class FinancialTracker {
            for (Transaction transaction : transactions) {
                if (transaction.getDate().isAfter(startDate.minusDays(1)) && transaction.getDate().isBefore(endDate.plusDays(1))) {
                    System.out.println(transaction);
+                   return;
                }
            }
            System.out.println("There are no transactions in this timeline!");
